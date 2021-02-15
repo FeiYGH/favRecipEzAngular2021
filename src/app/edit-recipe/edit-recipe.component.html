@@ -1,0 +1,182 @@
+<h2 *ngIf="recipeToEdit">Edit Recipe: {{recipeToEdit.title}}</h2>
+<div class="addRecipeDiv" > 
+    <div class="addRecipeDetails">
+        <div class="greenRecipeDetails">
+            <label class="firstBox">*Title: </label>
+            <input [(ngModel)]="recipeToEdit.title" placeholder="Recipe Title"/>
+            <br/>
+        
+            <label class="firstBox">Description:</label>    
+            <input #recipeDescription type="text" [(ngModel)]="recipeToEdit.description" placeholder="Recipe Description"/>
+            <br/>
+        
+            <label class="firstBox">*Category: </label>
+            <!-- <input #recipeCategory [(ngModel)]="recipe.category" placeholder="category"/> -->
+            <select id="recipeCategories" name="category"  [(ngModel)]="recipeToEdit.category">
+                <option value="none" selected disabled> 
+                    Select a Category 
+                </option> 
+                <option value="Beef">Beef</option>
+                <option value="Breakfast">Breakfast</option>
+                <option value="Chicken">Chicken</option>
+                <option value="Dessert">Dessert</option>
+                <option value="Goat">Goat</option>
+                <option value="Lamb">Lamb</option>
+                <option value="Miscellaneous" >Miscellaneous</option>
+                <option value="Pasta">Pasta</option>
+                <option value="Pork">Pork</option>
+                <option value="Seafood">Seafood</option>
+                <option value="Side">Side</option>
+                <option value="Starter">Starter</option>
+                <option value="Vegan">Vegan</option>
+                <option value="Vegetarian">Vegetarian</option>
+            </select>
+            
+            
+            <label class="firstBox">Cuisine Type:</label>
+            <input  #recipeFoodType [(ngModel)]="recipeToEdit.foodType" placeholder="Recipe Cuisine Type"/>
+            <br/>
+        
+            <label class="firstBox">Prep Time:  </label>
+            <input type="number" #recipePrepTime [(ngModel)]="recipeToEdit.prepTime" placeholder="Recipe Prep Time"/>
+            <label class="firstBox">Cook Time: </label>
+            <input type="number" #recipeCookTime [(ngModel)]="recipeToEdit.cookTime" placeholder="Recipe Cook Time"/>
+            <label class="firstBox">Total Time:</label>
+            <input type="number" #recipeTotalTime [(ngModel)]="recipeToEdit.totalTime" placeholder="totalTime">
+            <br/>
+        
+            <label class="firstBox">Servings:</label>
+            <input #recipeServings [(ngModel)]="recipeToEdit.servings" placeholder="Recipe Servings"/>
+            <label class="firstBox">Calories: </label>
+            <input #recipeCalories [(ngModel)]="recipeToEdit.calories" placeholder="Calories">   
+            <br/><span class="requiredStar">*</span><span class="requiredNote">Required fields</span>
+        </div>
+    </div>
+   
+    <label>Display recipe to public?</label>
+    <input type="checkbox" #recipeFoodType [(ngModel)]="recipeToEdit.publicRecipe">
+    <br/><br/>
+
+    <h2>Ingredients!</h2>
+    <!-- Edit and Delete View Buttons-->
+    <button (click)="selectEditIngredView()">Edit Ingredients</button>&nbsp;
+    <button (click)="selectDeleteIngredView()">Delete Individual Ingredients</button><br/>
+    <!-- Editing Ingredients and corrponding measurements-->
+    <div [class.visible]="editIngredView===true" [class.hidden]="editIngredView===false">
+        <label><span class="required">*</span>These are your current ingredients for editing. If you want to add, please put in the "Additional Ingredients" box.</label>
+        <br/>
+        <span class="moreInfo">**Ingredients will be ordered in the order you put them.**</span><br/>
+        <span class="moreInfo">**Please put a single ingredient and corresponding measurement on one line.**</span>
+        
+        <br/> 
+        
+        <textarea ref-textarea rows="10"  cols="50" placeholder="Ex. 1 tbsp. salt" [(ngModel)]="allIngredients">{{allIngredients}}
+        </textarea><br/>
+    
+        <!-- To Add Additional Ingredients-->
+        <br/>
+        <label>Additional Ingredients?</label><br/>
+        <span class="moreInfo">**Please put a single ingredient and corresponding measurement on one line.**</span>
+        <br/>
+        <textarea ref-textarea rows="10"  cols="50" placeholder="Ex. 1 tbsp. salt" [(ngModel)]="ingredientsToAdd">
+        </textarea><br/>
+        <label>Please check if no ingredient edits or additions</label>
+        <input type="checkbox" #recipeFoodType [(ngModel)]="noChangedIngredients"><br/>
+        <span class="moreInfo">**If checked, any edits to ingredients will not be processed.**</span><br/><br/>
+    </div>
+
+    
+     <!-- Delete Individual Ingredients -->
+     <div [class.visible]="deleteIngredView===true" [class.hidden]="deleteIngredView===false">
+        <label><span class="required">*</span>Delete ingredient(s) by pressing on the button.</label>
+        <br/>
+        <span class="moreInfo">**Once you delete, it is deleted. You can add it back in the edit section.**</span>
+        <br/>
+        <ul>
+            <div class="deleteIndIngred" *ngFor="let ingredient of ingredients; let i = index" [attr.data-index]="i">
+                <textarea #recipeDirections rows="3" cols="45"  [(ngModel)]="ingredient.ingredientStr">{{ingredient.ingredientStr}}
+                </textarea>&nbsp;&emsp;&emsp;
+                <button class="deleteButton" (click)="deleteIngredient(i)">
+                    <span style="margin:0px" class="deleteIconImg"></span>
+                </button>
+            </div>
+        </ul>
+     </div>
+
+    <br/><br/>
+
+
+    <!-- Instructions-->
+    <h2>Instructions!</h2>
+    <!-- Composite and Individual View Buttons-->
+    <button (click)="selectCompView()">Edit - Composite View</button>&nbsp;
+    <button (click)="selectIndView()" >Edit - Individual Instructions</button>
+    <button (click)="selectDelInstructsView()">Delete Individual Instructions</button>
+    
+    <!-- Instructions Individual View-->
+    <div [class.visible]="individualView===true" [class.hidden]="individualView===false">
+        <label><span class="required">*</span>Edit your directions.</label>
+        <br/>
+        <span class="moreInfo">**If no change, please click on "No change to ingredients?" checkbox.**</span>
+        <br/>
+        <ul>
+            <div class="changeOrderDiv" *ngFor="let instruction of instructions; let i = index" [attr.data-index]="i">
+                <textarea #recipeDirections rows="3" cols="45"  [(ngModel)]="instruction.instructionLine">{{instruction.instructionLine}}
+                </textarea>
+                <div class="moveUpDownDiv">
+                    <button class="moveUp" style="margin:0px; margin-bottom:5px;" (click)="moveUp(i)"></button>
+                    <button class="moveDown" style="margin:0px;" (click)="moveDown(i)"></button>
+                </div>
+            </div>
+            
+            <textarea #addRecipeDirections style="background-color:blanchedalmond;" rows="3" cols="45" 
+                placeholder='Add New Instruction(s) Here. &#10;Start each new instruction on a new line. &#10;Ex. Mix the flour, cocoa power, eggs, and sugar together.'
+                [(ngModel)]="newInstructionLine">
+                {{newInstructionLine}}
+            </textarea><br/>
+            <button (click)="addNewInstruction()">Add New Instruction</button><br/>
+            <label>Please check if no instruction edits.</label>
+            <input type="checkbox"  [(ngModel)]="noChangedInstructions"><br/> 
+            <span class="moreInfo">**If checked, any edits to instructions will not be processed.**</span><br/><br/>
+        </ul>
+
+    </div>
+     <!-- Instructions Composite View-->
+    <div [class.visible]="compositeView===true" [class.hidden]="compositeView===false">
+        <label><span class="required">*</span>Edit recipe instructions. If additional instructions, you can put insert them wherever you want. </label>
+        <br/>
+        <span class="moreInfo">**Please start each instruction on a new line.**</span>
+        <br/>
+        <textarea #recipeDirections [(ngModel)]="allInstructions" rows="10" cols="50" placeholder="Ex. Mix the flour, cocoa power, eggs, and sugar together.">{{allInstructions}}
+        </textarea><br/>
+        <br/>
+            <label>Please check if no instruction edits.</label>
+            <input type="checkbox"  [(ngModel)]="noChangedInstructions"><br/> 
+            <span class="moreInfo">**If checked, any edits to instructions will not be processed.**</span><br/><br/>
+        
+    </div>
+
+     <!-- Delete Individual Instructions -->
+     <div [class.visible]="deleteIndInstructsView===true" [class.hidden]="deleteIndInstructsView===false">
+        <label><span class="required">*</span>Delete instruction(s) by pressing on the button.</label>
+        <br/>
+        <span class="moreInfo">**Once you delete, it is deleted. You can add it back in the edit sections.**</span>
+        <br/>
+  
+        <ul>
+            <div class="deleteIndInstruction" *ngFor="let instruction of instructions; let i = index" [attr.data-index]="i">
+                <textarea #recipeDirections rows="3" cols="45"  [(ngModel)]="instruction.instructionLine">{{instruction.instructionLine}}
+                </textarea>
+                <button class="deleteButton" (click)="deleteInstruction(i)">
+                    <span style="margin:0px" class="deleteIconImg"></span>
+                </button>
+               
+            </div>
+        </ul>
+    </div>
+
+
+    <button (click)="edit()" >
+        Edit Recipe
+    </button>
+</div>
