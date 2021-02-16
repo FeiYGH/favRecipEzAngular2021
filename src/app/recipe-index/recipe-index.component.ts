@@ -54,10 +54,4 @@ export class RecipeIndexComponent implements OnInit {
   getRecipes(): void{
     this.recipeService.getRecipes().subscribe(recipes => this.recipes = recipes);
   }
-
-      
-  
-
-
-
 }
