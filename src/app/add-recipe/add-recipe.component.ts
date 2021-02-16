@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Instruction } from '../instruction';
-import { Ingredient } from '../Ingredient';
+import { Ingredient } from '../ingredient';
 
 import {Recipe} from '../recipe';
 import {RecipeService} from '../recipe.service'

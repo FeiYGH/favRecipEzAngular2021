@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Data, Params, Router } from '@angular/router';
 // import { ConsoleReporter } from 'jasmine';
-import { Ingredient } from '../Ingredient';
+import { Ingredient } from '../ingredient';
 import { Instruction } from '../instruction';
 import { Recipe } from '../recipe';
 import { RecipeService } from '../recipe.service';

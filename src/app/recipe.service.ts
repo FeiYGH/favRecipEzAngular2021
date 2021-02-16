@@ -11,7 +11,7 @@ import{catchError, map, tap} from 'rxjs/operators';
 import { TokenType } from '@angular/compiler';
 import { TokenizeOptions } from '@angular/compiler/src/ml_parser/lexer';
 import { Instruction } from './instruction';
-import { Ingredient } from './Ingredient';
+import { Ingredient } from './ingredient';
 import { DirIngredRequest } from './dir-ingred-request';
 
 
